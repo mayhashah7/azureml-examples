@@ -1,0 +1,21 @@
+# AzureML workspace setup pipeline
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- main
+
+pool: mayha-wsl
+
+steps:
+  - task: AzureCLI@2
+    displayName: Set ML Workspace Context
+    inputs:
+      azureSubscription: $(ado-pipeline-sp)
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az version
+        az extension add -n azure-cli-ml -y
+        az extension update -n azure-cli-ml
+        az configure --defaults workspace=azmlwksb3hgmn group=az-edw-eastus-rg location=eastus

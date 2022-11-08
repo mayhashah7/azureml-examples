@@ -1,7 +1,7 @@
 $schema: https://azuremlschemas.azureedge.net/latest/batchDeployment.schema.json
 name: mnist-keras-dpl
 description: A deployment using Keras with TensorFlow to solve the MNIST classification dataset.
-endpoint_name: mnist-batch
+endpoint_name: mnist-batch-keras
 model: 
   path: ./mnist-keras/model/
 code_configuration:
