@@ -9,13 +9,24 @@ pool: mayha-wsl
 
 steps:
   - task: AzureCLI@2
-    displayName: Set ML Workspace Context
+    displayName: Install Azure CLI extension for ML (v2)
     inputs:
       azureSubscription: ado-pipeline-sp
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
         az version
-        az extension add -n azure-cli-ml -y
-        az extension update -n azure-cli-ml
+        az extension remove -n azure-cli-ml
+        az extension remove -n ml
+        az extension add -n ml -y
+        az extension update -n ml
+        az extension list
+
+  - task: AzureCLI@2
+    displayName: Connect to AML Workspace using CLI v2
+    inputs:
+      azureSubscription: ado-pipeline-sp
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
         az configure --defaults workspace=azmlwksb3hgmn group=az-edw-eastus-rg location=eastus
