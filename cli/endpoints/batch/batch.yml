@@ -30,3 +30,12 @@ steps:
       scriptLocation: inlineScript
       inlineScript: |
         az configure --defaults workspace=azmlwksb3hgmn group=az-edw-eastus-rg location=eastus
+
+  - task: AzureCLI@2
+    displayName: Deploy Batch Endpoint
+    inputs:
+      azureSubscription: ado-pipeline-sp
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az ml batch-endpoint create --file mnist-endpoint.yml
