@@ -96,5 +96,5 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        JOB_NAME=$(az ml batch-endpoint invoke --name ${{ parameters.endpoint git}} --input https://pipelinedata.blob.core.windows.net/sampledata/mnist --input-type uri_folder --query name -o tsv) 
+        JOB_NAME=$(az ml batch-endpoint invoke --name ${{ parameters.endpoint }} --input https://pipelinedata.blob.core.windows.net/sampledata/mnist --input-type uri_folder --query name -o tsv) 
 
