@@ -63,3 +63,12 @@ steps:
       inlineScript: |
         az ml batch-deployment create --file "$(System.DefaultWorkingDirectory)/cli/endpoints/batch/mnist-keras-deployment.yml" --endpoint-name mnist-batch-mayha --set-default
 
+  - task: AzureCLI@2
+    displayName: Score Batch Endpoint
+    inputs:
+      azureSubscription: ado-pipeline-sp
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        JOB_NAME=$(az ml batch-endpoint invoke --name mnist-batch-mayha --input https://pipelinedata.blob.core.windows.net/sampledata/mnist --input-type uri_folder --query name -o tsv) 
+
