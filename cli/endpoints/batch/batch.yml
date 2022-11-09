@@ -47,5 +47,4 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az ml batch-endpoint create --file mnist-endpoint.yml
-
+        az ml batch-endpoint create --name mnist-batch-mayha
