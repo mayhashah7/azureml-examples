@@ -15,7 +15,7 @@ parameters:
   displayName: Location
   type: string
   default: eastus
-- name: service-connection
+- name: serviceConnection
   displayName: ARM Service Connection Name
   type: string
   default: ado-pipeline-sp
@@ -42,7 +42,7 @@ steps:
   - task: AzureCLI@2
     displayName: Install Azure CLI extension for ML (v2)
     inputs:
-      azureSubscription: ${{ parameters.service-connection }}
+      azureSubscription: ${{ parameters.serviceConnection }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
@@ -96,5 +96,5 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        JOB_NAME=$(az ml batch-endpoint invoke --name ${{ parameters.endpoint-name }} --input https://pipelinedata.blob.core.windows.net/sampledata/mnist --input-type uri_folder --query name -o tsv) 
+        JOB_NAME=$(az ml batch-endpoint invoke --name ${{ parameters.endpoint-name git}} --input https://pipelinedata.blob.core.windows.net/sampledata/mnist --input-type uri_folder --query name -o tsv) 
 
