@@ -64,7 +64,7 @@ steps:
         az configure --defaults workspace=${{ parameters.mlWorkspace }} group=${{ parameters.resourceGroup }} location=${{ parameters.location }}
   
   - checkout: self
-    path: s/
+    path: s/cli
 
   - task: AzureCLI@2
     displayName: Deploy Model
