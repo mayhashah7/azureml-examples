@@ -42,7 +42,7 @@ steps:
   - task: AzureCLI@2
     displayName: Install Azure CLI extension for ML (v2)
     inputs:
-      azureSubscription: ${{parameters.service-connection}}
+      azureSubscription: ${{ parameters.service-connection }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
@@ -60,41 +60,41 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az configure --defaults workspace=${{parameters.ml-workspace}} group=${{parameters.resource-group}} location=${{parameters.location}}
+        az configure --defaults workspace=${{ parameters.ml-workspace }} group=${{ parameters.resource-group }} location=${{ parameters.location }}
 
   - task: AzureCLI@2
     displayName: Deploy Model
     inputs:
-      azureSubscription: ${{parameters.service-connection}}
+      azureSubscription: ${{ parameters.service-connection }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az ml model create --name ${{parameters.model-name}} --type "custom_model" --path "$(System.DefaultWorkingDirectory)/cli/endpoints/batch/mnist-keras/model"
+        az ml model create --name ${{ parameters.model-name }} --type "custom_model" --path "$(System.DefaultWorkingDirectory)/cli/endpoints/batch/mnist-keras/model"
 
   - task: AzureCLI@2
     displayName: Deploy Batch Endpoint
     inputs:
-      azureSubscription: ${{parameters.service-connection}}
+      azureSubscription: ${{ parameters.service-connection }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az ml batch-endpoint create --name ${{parameters.endpoint-name}}
+        az ml batch-endpoint create --name ${{ parameters.endpoint-name }}
 
   - task: AzureCLI@2
     displayName: Complete Batch Endpoint Configuration
     inputs:
-      azureSubscription: ${{parameters.service-connection}}
+      azureSubscription: ${{ parameters.service-connection }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az ml batch-deployment create --file "$(System.DefaultWorkingDirectory)/cli/endpoints/batch/mnist-keras-deployment.yml" --endpoint-name ${{parameters.endpoint-name}} --set-default
+        az ml batch-deployment create --file "$(System.DefaultWorkingDirectory)/cli/endpoints/batch/mnist-keras-deployment.yml" --endpoint-name ${{ parameters.endpoint-name }} --set-default
 
   - task: AzureCLI@2
     displayName: Score Batch Endpoint
     inputs:
-      azureSubscription: ${{parameters.service-connection}}
+      azureSubscription: ${{ parameters.service-connection }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        JOB_NAME=$(az ml batch-endpoint invoke --name ${{parameters.endpoint-name}} --input https://pipelinedata.blob.core.windows.net/sampledata/mnist --input-type uri_folder --query name -o tsv) 
+        JOB_NAME=$(az ml batch-endpoint invoke --name ${{ parameters.endpoint-name }} --input https://pipelinedata.blob.core.windows.net/sampledata/mnist --input-type uri_folder --query name -o tsv) 
 
