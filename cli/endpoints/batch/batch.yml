@@ -2,6 +2,32 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+parameters:
+- name: ml-workspace
+  displayName: ML Workspace Name
+  type: string
+  default: azmlwksb3hgmn
+- name: resource-group
+  displayName: Resource Group Name
+  type: string
+  default: az-edw-eastus-rg
+- name: location
+  displayName: Location
+  type: string
+  default: eastus
+- name: service-connection
+  displayName: ARM Service Connection Name
+  type: string
+  default: ado-pipeline-sp
+- name: model-name
+  displayName: Model Name
+  type: string
+  default: mnist-model-ado
+- name: endpoint-name
+  displayName: Batch Endpoint Name
+  type: string
+  default: mnist-batch-ado
+
 trigger:
   branches:
       include:
@@ -16,7 +42,7 @@ steps:
   - task: AzureCLI@2
     displayName: Install Azure CLI extension for ML (v2)
     inputs:
-      azureSubscription: ado-pipeline-sp
+      azureSubscription: ${{parameters.service-connection}}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
@@ -30,45 +56,45 @@ steps:
   - task: AzureCLI@2
     displayName: Connect to AML Workspace using CLI v2
     inputs:
-      azureSubscription: ado-pipeline-sp
+      azureSubscription: ${{ parameters.service-connection }}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az configure --defaults workspace=azmlwksb3hgmn group=az-edw-eastus-rg location=eastus
+        az configure --defaults workspace=${{parameters.ml-workspace}} group=${{parameters.resource-group}} location=${{parameters.location}}
 
   - task: AzureCLI@2
     displayName: Deploy Model
     inputs:
-      azureSubscription: ado-pipeline-sp
+      azureSubscription: ${{parameters.service-connection}}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az ml model create --name mnist-ado --type "custom_model" --path "$(System.DefaultWorkingDirectory)/cli/endpoints/batch/mnist-keras/model"
+        az ml model create --name ${{parameters.model-name}} --type "custom_model" --path "$(System.DefaultWorkingDirectory)/cli/endpoints/batch/mnist-keras/model"
 
   - task: AzureCLI@2
     displayName: Deploy Batch Endpoint
     inputs:
-      azureSubscription: ado-pipeline-sp
+      azureSubscription: ${{parameters.service-connection}}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az ml batch-endpoint create --name mnist-batch-mayha
+        az ml batch-endpoint create --name ${{parameters.endpoint-name}}
 
   - task: AzureCLI@2
     displayName: Complete Batch Endpoint Configuration
     inputs:
-      azureSubscription: ado-pipeline-sp
+      azureSubscription: ${{parameters.service-connection}}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az ml batch-deployment create --file "$(System.DefaultWorkingDirectory)/cli/endpoints/batch/mnist-keras-deployment.yml" --endpoint-name mnist-batch-mayha --set-default
+        az ml batch-deployment create --file "$(System.DefaultWorkingDirectory)/cli/endpoints/batch/mnist-keras-deployment.yml" --endpoint-name ${{parameters.endpoint-name}} --set-default
 
   - task: AzureCLI@2
     displayName: Score Batch Endpoint
     inputs:
-      azureSubscription: ado-pipeline-sp
+      azureSubscription: ${{parameters.service-connection}}
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        JOB_NAME=$(az ml batch-endpoint invoke --name mnist-batch-mayha --input https://pipelinedata.blob.core.windows.net/sampledata/mnist --input-type uri_folder --query name -o tsv) 
+        JOB_NAME=$(az ml batch-endpoint invoke --name ${{parameters.endpoint-name}} --input https://pipelinedata.blob.core.windows.net/sampledata/mnist --input-type uri_folder --query name -o tsv) 
 
