@@ -43,7 +43,7 @@ steps:
       scriptType: bash
       scriptLocation: inlineScript
       inlineScript: |
-        az ml model create --name mnist-ado --type "custom_model" --path "$(System.DefaultWorkingDirectory)/cli/endpoints/batch/mnist-keras/model"
+        az ml model create --name mnist-ado --type "custom_model" --path "$(System.DefaultWorkingDirectory)/azureml-examples/cli/endpoints/batch/mnist-keras/model"
 
   - task: AzureCLI@2
     displayName: Deploy Batch Endpoint
