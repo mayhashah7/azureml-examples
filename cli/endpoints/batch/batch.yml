@@ -3,11 +3,12 @@
 # https://aka.ms/yaml
 
 trigger:
-- main
-
-paths:
-    include:
-      - cli/*
+  branches:
+      include:
+        - main
+  paths:
+      include:
+        - cli/*
 
 pool: mayha-wsl
 
