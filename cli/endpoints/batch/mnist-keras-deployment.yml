@@ -10,7 +10,7 @@ code_configuration:
 environment:
   conda_file: ./mnist-keras/environment/conda.yml
   image: mcr.microsoft.com/azureml/openmpi4.1.0-ubuntu20.04:latest
-compute: azureml:batch-cluster
+compute: NotACluster
 resources:
   instance_count: 1
 max_concurrency_per_instance: 2
