@@ -26,7 +26,7 @@ parameters:
 - name: endpoint
   displayName: Batch Endpoint Name
   type: string
-  default: mnist-batch-ado
+  default: mnist-set-test
 
 trigger:
   branches:
